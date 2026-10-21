@@ -2,7 +2,9 @@ package com.example.demo;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,13 +15,17 @@ public class ChatController {
     private final ChatClient chatClient;
     private final TimeTools timeTools;
 
-    public ChatController(ChatClient.Builder builder, ChatMemory chatMemory, TimeTools timeTools) {
+    // Inject the VectorStore we created in RagConfig
+    public ChatController(ChatClient.Builder builder, ChatMemory chatMemory, TimeTools timeTools, VectorStore vectorStore) {
         this.timeTools = timeTools;
         
-        // Build the ChatClient with Memory and a System Prompt
         this.chatClient = builder
-                .defaultSystem("You are a helpful and concise AI assistant. If asked for the time, use your tools.")
-                .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory))
+                .defaultSystem("You are a helpful AI assistant for Loganathan Tech Solutions. Answer questions using the provided context.")
+                .defaultAdvisors(
+                        new MessageChatMemoryAdvisor(chatMemory),
+                        // Add the RAG Advisor here!
+                        new QuestionAnswerAdvisor(vectorStore) 
+                )
                 .build();
     }
 
@@ -27,7 +33,7 @@ public class ChatController {
     public String chat(@RequestParam(value = "message") String message) {
         return chatClient.prompt()
                 .user(message)
-                .tools(timeTools) // Enable the Time Tool
+                .tools(timeTools)
                 .call()
                 .content();
     }
