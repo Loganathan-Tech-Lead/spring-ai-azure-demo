@@ -1,6 +1,13 @@
 trigger:
   - main
 
+resources:
+  repositories:
+    - repository: self
+      type: github
+      name: Loganathan-Tech-Lead/spring-ai-azure-demo
+      endpoint: github-pat-connection
+
 pool:
   vmImage: 'ubuntu-latest'
 
