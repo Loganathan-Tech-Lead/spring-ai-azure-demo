@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-ai-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-ai-app
+  template:
+    metadata:
+      labels:
+        app: spring-ai-app
+    spec:
+      containers:
+      - name: spring-ai-app
+        image: springaiacr2026.azurecr.io/spring-ai-azure-demo:v1
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
