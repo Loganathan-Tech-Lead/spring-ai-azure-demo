@@ -1,5 +1,4 @@
-trigger:
-  - main
+trigger: none  # We are disabling the broken Azure trigger
 
 pool:
   vmImage: 'ubuntu-latest'
