@@ -1,0 +1,16 @@
+name: Trigger Azure Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Azure DevOps Pipeline
+        run: |
+          curl -X POST "https://dev.azure.com/malz311204/Resilience-Patterns/_apis/build/builds?api-version=7.1" \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Basic $(echo -n :${{ secrets.AZURE_DEVOPS_PAT }} | base64)" \
+          -d '{"definition": {"id": 7}}'
