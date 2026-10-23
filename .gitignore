@@ -29,3 +29,4 @@ Thumbs.db
 *.log
 logs/
 logs.zip
+target/
