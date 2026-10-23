@@ -1,1 +1,53 @@
-(paste the full YAML)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-ai-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-ai-app
+  template:
+    metadata:
+      labels:
+        app: spring-ai-app
+    spec:
+      containers:
+      - name: spring-ai-app
+        image: springaiacr2026.azurecr.io/spring-ai-azure-demo:v2
+        ports:
+        - containerPort: 8080
+        env:
+        - name: AZURE_OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: azure-openai-secret
+              key: api-key
+        - name: AZURE_OPENAI_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: azure-openai-secret
+              key: endpoint
+        - name: SPRING_PROFILES_ACTIVE
+          value: "default"
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "512Mi"
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          failureThreshold: 12
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 120
+          periodSeconds: 20
+          failureThreshold: 3
