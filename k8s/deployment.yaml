@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: spring-ai-app
-        image: springaiacr2026.azurecr.io/spring-ai-azure-demo:v2
+        image: springaiacr2026.azurecr.io/spring-ai-azure-demo:v4
         ports:
         - containerPort: 8080
         env:
