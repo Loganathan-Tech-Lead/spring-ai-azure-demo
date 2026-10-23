@@ -6,7 +6,7 @@ resources:
     - repository: self
       type: github
       name: Loganathan-Tech-Lead/spring-ai-azure-demo
-      endpoint: github.com_Loganathan-Tech-Lead
+      endpoint: github-connection
 
 pool:
   vmImage: 'ubuntu-latest'
