@@ -7,8 +7,12 @@ import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.ai.reader.TextReader;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Configuration
@@ -16,14 +20,21 @@ public class RagConfig {
 
     @Bean
     public VectorStore vectorStore(EmbeddingModel embeddingModel) {
-        // 1. Build the vector store using the injected Embedding Model
         SimpleVectorStore vectorStore = SimpleVectorStore.builder(embeddingModel).build();
-        
-        // 2. Read and vectorize your knowledge base file
-        TextReader textReader = new TextReader(new ClassPathResource("docs/company_policy.txt"));
-        List<Document> documents = textReader.get();
-        vectorStore.add(documents);
-        
+
+        try (var in = new ClassPathResource("docs/company_policy.txt").getInputStream();
+             var reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
+
+            List<Document> documents = reader.lines()
+                    .map(String::trim)
+                    .filter(line -> !line.isBlank())
+                    .map(Document::new)
+                    .toList();
+
+            vectorStore.add(documents);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
         return vectorStore;
     }
 }
