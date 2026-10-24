@@ -55,7 +55,7 @@ stages:
 
           - task: AzureWebApp@1
             inputs:
-              azureSubscription: 'azure-subscription-connection'
+              azureSubscription: 'AzureStudentConnection'
               appType: 'webAppLinux'
               appName: 'logan-spring-ai-demo'
               package: '$(System.ArtifactsDirectory)/drop/*.jar'
