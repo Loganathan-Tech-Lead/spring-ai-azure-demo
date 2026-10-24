@@ -21,7 +21,7 @@ public class EscalationTool {
     @Tool(description = "Hand the request to a human when you cannot answer, the user is upset, "
             + "or the request is outside your allowed actions. Give a short reason.")
     public String escalateToHuman(String reason) {
-        recorder.recordTool("escalateToHuman");
+        if (!recorder.tryCall("escalateToHuman")) { return ToolUsageRecorder.LIMIT_MESSAGE; }
         String ticket = "TKT-" + counter.incrementAndGet();
         log.info("Escalation {} created", ticket); // reason intentionally not logged
         return "Escalated. Ticket " + ticket + ". A human will follow up.";

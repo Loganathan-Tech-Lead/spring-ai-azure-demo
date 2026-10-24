@@ -18,9 +18,18 @@ class BookingToolsTest {
 
     @Test
     void confirmedBookingTakesTheSlot() {
+        recorder.setContext("s1", "Yes, confirm it");
         assertTrue(tools.bookOnboardingSlot("Asha", "2026-11-03", "10:00", true).startsWith("Booked"));
         assertFalse(tools.listAvailableSlots("2026-11-03").contains("10:00"));
         assertTrue(tools.bookOnboardingSlot("Ravi", "2026-11-03", "10:00", true).contains("not available"));
+    }
+
+    @Test
+    void confirmedFlagWithoutUserConfirmationIsRefused() {
+        recorder.setContext("s1", "Book Asha on 2026-11-06 at 10:00");
+        String result = tools.bookOnboardingSlot("Asha", "2026-11-06", "10:00", true);
+        assertTrue(result.startsWith("NOT BOOKED"));
+        assertTrue(tools.listAvailableSlots("2026-11-06").contains("10:00"));
     }
 
     @Test

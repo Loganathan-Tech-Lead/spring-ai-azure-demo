@@ -20,7 +20,7 @@ public class PolicySearchTool {
     @Tool(description = "Search the company handbook (leave, IT, working hours, expenses, onboarding, notice period). "
             + "Use this for any question about company policies or rules.")
     public String searchPolicies(String question) {
-        recorder.recordTool("searchPolicies");
+        if (!recorder.tryCall("searchPolicies")) { return ToolUsageRecorder.LIMIT_MESSAGE; }
         List<Document> docs = ragService.retrieve(question);
         recorder.recordSources(ragService.toSources(docs));
         return docs.isEmpty() ? "No matching policy found." : ragService.buildContext(docs);
