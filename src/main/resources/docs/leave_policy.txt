@@ -1,0 +1,5 @@
+Annual Leave: Employees receive 25 days of paid annual leave per year.
+Sick Leave: Employees receive 10 paid sick days per year. A medical note is needed after 3 consecutive days.
+Maternity Leave: Maternity leave is 26 weeks of paid leave.
+Paternity Leave: Paternity leave is 2 weeks of paid leave.
+Carry Over: Up to 5 unused annual leave days can be carried over to the next year.

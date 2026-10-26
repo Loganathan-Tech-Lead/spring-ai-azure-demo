@@ -9,15 +9,18 @@ import org.springframework.web.client.RestClient;
 public class InventoryTools {
 
     private final RestClient restClient;
+    private final ToolUsageRecorder recorder;
 
-    public InventoryTools() {
+    public InventoryTools(ToolUsageRecorder recorder) {
+        this.recorder = recorder;
         this.restClient = RestClient.builder()
-                .baseUrl("http://localhost:9090")
+                .baseUrl("http://localhost:8080")
                 .build();
     }
 
     @Tool(description = "Check the real-time stock availability of an item in the e-commerce inventory")
     public String checkInventory(@ToolParam(description = "The name of the product, e.g., laptop, phone") String item) {
+        if (!recorder.tryCall("checkInventory")) { return ToolUsageRecorder.LIMIT_MESSAGE; }
         try {
             return restClient.get()
                     .uri("/api/inventory/check?item={item}", item)
