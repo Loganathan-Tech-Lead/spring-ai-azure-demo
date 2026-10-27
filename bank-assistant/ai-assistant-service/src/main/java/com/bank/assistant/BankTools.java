@@ -64,19 +64,5 @@ public Map<String, Object> getTransactions(
     }
 }
 
-    /*@Tool(description = "Get the most recent transactions of one of the customer's accounts, newest first")
-    public Object getTransactions(@ToolParam(description = "Account id such as ACC-1001") String accountId,
-                                  @ToolParam(description = "How many transactions, 1 to 20. Use 5 if not specified",
-                                             required = false) Integer limit,
-                                  ToolContext ctx) {
-        int n = (limit == null) ? 5 : limit;
-        try {
-            return client.transactions(customer(ctx), accountId, n);
-        } catch (HttpClientErrorException.NotFound e) {
-            return "Account not found for this customer.";
-        } catch (RestClientException e) {
-            log.error("getTransactions failed for {}", accountId, e);
-            return "Could not retrieve transactions right now.";
-        }
-    }*/
+   
 }
