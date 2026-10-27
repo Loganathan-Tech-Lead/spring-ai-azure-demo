@@ -14,7 +14,7 @@ spec:
         - name: acr-pull
       containers:
         - name: ai-assistant-service
-          image: springaiacr2026.azurecr.io/ai-assistant-service:v1
+          image: springaiacr2026.azurecr.io/ai-assistant-service:v2
           ports:
             - containerPort: 8083
           env:
@@ -26,6 +26,8 @@ spec:
                 secretKeyRef: { name: azure-openai-secret, key: endpoint }
             - name: ACCOUNT_SERVICE_URL
               value: http://account-service:8081
+            - name: LOAN_SERVICE_URL
+              value: http://loan-service:8082
           resources:
             requests: { cpu: 100m, memory: 256Mi }
             limits: { cpu: 500m, memory: 512Mi }

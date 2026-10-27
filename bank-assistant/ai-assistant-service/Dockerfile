@@ -1,6 +1,7 @@
 FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /src
 COPY pom.xml .
+COPY loan-service/pom.xml loan-service/
 COPY account-service/pom.xml account-service/
 COPY ai-assistant-service/pom.xml ai-assistant-service/
 COPY ai-assistant-service/src ai-assistant-service/src
