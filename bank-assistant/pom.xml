@@ -19,5 +19,6 @@
     <modules>
         <module>account-service</module>
         <module>ai-assistant-service</module>
+        <module>loan-service</module>
     </modules>
 </project>
