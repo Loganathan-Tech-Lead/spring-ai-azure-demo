@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-assistant-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: ai-assistant-service }
+  template:
+    metadata:
+      labels: { app: ai-assistant-service }
+    spec:
+      imagePullSecrets:
+        - name: acr-pull
+      containers:
+        - name: ai-assistant-service
+          image: springaiacr2026.azurecr.io/ai-assistant-service:v1
+          ports:
+            - containerPort: 8083
+          env:
+            - name: AZURE_OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef: { name: azure-openai-secret, key: api-key }
+            - name: AZURE_OPENAI_ENDPOINT
+              valueFrom:
+                secretKeyRef: { name: azure-openai-secret, key: endpoint }
+            - name: ACCOUNT_SERVICE_URL
+              value: http://account-service:8081
+          resources:
+            requests: { cpu: 100m, memory: 256Mi }
+            limits: { cpu: 500m, memory: 512Mi }
+          readinessProbe:
+            tcpSocket: { port: 8083 }
+            initialDelaySeconds: 40
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket: { port: 8083 }
+            initialDelaySeconds: 90
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-assistant-service
+spec:
+  type: ClusterIP
+  selector: { app: ai-assistant-service }
+  ports:
+    - port: 8083
+      targetPort: 8083
